@@ -14,7 +14,7 @@ export function loadBuster(image){
     const spriteSheet = new SpriteSheet(image,32,32);
     spriteSheet.define('buster',1,0);
 
-    const pos = new Vec2D(50,150);
+    const pos = new Vec2D(175,240);
     const size = new Vec2D(32,32);
 
     return new Player(size,pos,spriteSheet.get('buster'));

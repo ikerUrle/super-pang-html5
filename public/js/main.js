@@ -1,9 +1,15 @@
 import SpriteSheet from "./SpriteSheet.js";
 import {loadBuster, loadImage} from "./loaders.js";
-import Keyboard from "./Keyboard.js";
+import setupKeyboard from "./input.js";
+import Settings from "./Settings.js";
 
 const canvas = document.getElementById('screen');
 const context = canvas.getContext('2d');
+
+//Override settings
+
+Settings.SCREEN_HEIGHT = canvas.height;
+Settings.SCREEN_WIDTH = canvas.width;
 
 
 loadImage('img/sprites.png').then(image => {
@@ -24,15 +30,14 @@ loadImage('img/sprites.png').then(image => {
         context.clearRect(0, 0, canvas.width, canvas.height);
         buster.draw(context);
         buster.update(deltaTime/1000);
-        //sprites.draw('buster', context, pos.x, pos.y);
         lastTime = time;
         requestAnimationFrame(update);
     }
 
-    const input = new Keyboard();
-    input.addMapping('Space', keyState => {if(keyState == 1){console.log(keyState)}});
+    const input = setupKeyboard(buster);
     input.listenTo(window);
 
+    buster.draw(context);
     update(0);
 
 });
