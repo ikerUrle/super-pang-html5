@@ -20,4 +20,8 @@ export default class SpriteSheet {
         context.drawImage(buffer, x, y);
     }
 
+    get(name){
+        return this.buffers.get(name);
+    }
+
 }

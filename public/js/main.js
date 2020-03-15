@@ -1,19 +1,14 @@
 import SpriteSheet from "./SpriteSheet.js";
-
-function loadImage(url) {
-    return new Promise(resolve => {
-        const image = new Image();
-        image.addEventListener('load', () => resolve(image));
-        image.src = url;
-
-    });
-}
+import {loadBuster, loadImage} from "./loaders.js";
+import Keyboard from "./Keyboard.js";
 
 const canvas = document.getElementById('screen');
 const context = canvas.getContext('2d');
 
 
 loadImage('img/sprites.png').then(image => {
+
+    const buster = loadBuster(image);
 
 
     const sprites = new SpriteSheet(image, 32, 32);
@@ -22,21 +17,21 @@ loadImage('img/sprites.png').then(image => {
     let deltaTime = 0;
     let lastTime = 0;
 
-    let pos = {
-        x:64,
-        y:64
-    }
-
+ 
     function update(time) {
 
         deltaTime = time - lastTime;
-        console.log(deltaTime);
         context.clearRect(0, 0, canvas.width, canvas.height);
-        sprites.draw('buster', context, pos.x, pos.y);
-        pos.x +=2;
+        buster.draw(context);
+        buster.update(deltaTime/1000);
+        //sprites.draw('buster', context, pos.x, pos.y);
         lastTime = time;
         requestAnimationFrame(update);
     }
+
+    const input = new Keyboard();
+    input.addMapping('Space', keyState => {if(keyState == 1){console.log(keyState)}});
+    input.listenTo(window);
 
     update(0);
 
