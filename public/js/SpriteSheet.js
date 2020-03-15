@@ -11,7 +11,7 @@ export default class SpriteSheet {
         const buffer = document.createElement('canvas');
         buffer.width = this.width;
         buffer.height = this.height;
-        buffer.getContext("2d").drawImage(this.image, x, y, this.width, this.height, 0, 0, this.width, this.height);
+        buffer.getContext("2d").drawImage(this.image, x*this.width, y*this.height, this.width, this.height, 0, 0, this.width, this.height);
         this.buffers.set(name, buffer);
     }
 

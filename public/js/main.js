@@ -18,7 +18,7 @@ loadImage('img/sprites.png').then(image => {
 
 
     const sprites = new SpriteSheet(image, 32, 32);
-    sprites.define('buster', 0, 0);
+   
 
     let deltaTime = 0;
     let lastTime = 0;
