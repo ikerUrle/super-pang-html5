@@ -8,10 +8,17 @@ export default class Player extends Object2D {
         this.force = new Vec2D(0, 0);
         this.sprite = sprite;
         this.direction = new Vec2D(0,0);
+        this.distance = 0;
     }
 
     // time respresenta el tiempo que ha pasado desde la última ejecución
     update(time) {
+
+        if(this.direction.x !== 0){
+            this.distance += Settings.PLAYER_SPEED * time;
+        } else{
+            this.distance = 0;
+        }
 
         /*
         Asume por el momento que Settings.SCREEN_HEIGHT y Settings.SCREEN_WIDTH indican el tamaño de

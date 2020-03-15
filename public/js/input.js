@@ -11,21 +11,21 @@ export default function setupKeyboard(buster) {
 
     keyboard.addMapping('ArrowLeft', keyState => {
         if (keyState == PRESSED) {
-            buster.direction = new Vec2D(-1,0);
-            buster.update(0);
+            buster.direction.x = -1;
+           
+        } else{
+            buster.direction.x = 0;
         }
 
     });
 
     keyboard.addMapping('ArrowRight', keyState => {
         if (keyState == PRESSED) {
-            buster.direction = new Vec2D(1,0);
-            buster.update(0)
+            buster.direction.x = 1;
+        } else{
+            buster.direction.x = 0 
         }
     });
-
-
-
     return keyboard;
 }
 
