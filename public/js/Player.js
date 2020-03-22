@@ -12,7 +12,7 @@ export default class Player extends Object2D {
             return frameName;
         }
 
-        return 'buster';
+        return 'idle';
     }
 
     constructor(size, pos, spriteSheet) {
