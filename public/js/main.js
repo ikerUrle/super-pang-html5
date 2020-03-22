@@ -2,6 +2,7 @@ import SpriteSheet from "./SpriteSheet.js";
 import {loadBuster, loadImage, loadLevel, loadBalls, loadHookManager} from "./loaders.js";
 import setupKeyboard from "./input.js";
 import Settings from "./Settings.js";
+import {CollisionManager} from "./collisions.js";
 
 const canvas = document.getElementById('screen');
 const context = canvas.getContext('2d');
@@ -24,6 +25,8 @@ Promise.all([loadImage('img/sprites.png'),loadImage('img/hookRope.png'), loadLev
     const buster = loadBuster(image, levelSpec.player);
     buster.setHookManager(hookManager);
   
+    const collisionManager = new CollisionManager(hooks,balls);
+    
     let deltaTime = 0;
     let lastTime = 0;
 
@@ -32,14 +35,13 @@ Promise.all([loadImage('img/sprites.png'),loadImage('img/hookRope.png'), loadLev
 
         deltaTime = time - lastTime;
         context.clearRect(0, 0, canvas.width, canvas.height);
-       
+        
+        collisionManager.checkCollisions();
 
         hooks.forEach(hook =>{
             hook.draw(context);
             hook.update(deltaTime/1000);
         });
-
-      
 
         buster.draw(context);
         buster.update(deltaTime/1000);
