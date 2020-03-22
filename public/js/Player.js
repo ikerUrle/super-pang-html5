@@ -47,7 +47,7 @@ export default class Player extends Object2D {
          */
 
 
-        if (this.y < Settings.SCREEN_HEIGHT-this.height){
+        if (this.y < Settings.SCREEN_HEIGHT-this.height-Settings.MARGIN){
             this.force = this.force.add(Settings.GRAVITY * time); 
             this.position = this.position.add(new Vec2D(0,this.force.y * time));
             
@@ -60,10 +60,10 @@ export default class Player extends Object2D {
         // position = añadir fuerza * tiempo al eje y
 
         // position = añadir dirección * tiempo * velocidad del jugador al eje x
-        if (this.x < 0){
-            this.position = new Vec2D(0,this.y);
-        } else if(this.x > Settings.SCREEN_WIDTH - this.width){
-            this.position = new Vec2D(Settings.SCREEN_WIDTH - this.width, this.y);
+        if (this.x < Settings.MARGIN){
+            this.position = new Vec2D(Settings.MARGIN,this.y);
+        } else if(this.x > Settings.SCREEN_WIDTH - this.width - Settings.MARGIN){
+            this.position = new Vec2D(Settings.SCREEN_WIDTH - this.width -Settings.MARGIN, this.y);
         } 
       
 

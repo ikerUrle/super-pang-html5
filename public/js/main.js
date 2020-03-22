@@ -1,5 +1,5 @@
 import SpriteSheet from "./SpriteSheet.js";
-import {loadBuster, loadImage, loadLevel, loadBalls, loadHookManager} from "./loaders.js";
+import {loadBuster, loadImage, loadLevel, loadBalls, loadHookManager, loadBackground} from "./loaders.js";
 import setupKeyboard from "./input.js";
 import Settings from "./Settings.js";
 import {CollisionManager} from "./collisions.js";
@@ -13,14 +13,13 @@ Settings.SCREEN_HEIGHT = canvas.height;
 Settings.SCREEN_WIDTH = canvas.width;
 
 
-Promise.all([loadImage('img/sprites.png'),loadImage('img/hookRope.png'), loadLevel('1')])
-    .then(([image,hookImage, levelSpec]) => {
-
-   
+Promise.all([loadImage('img/sprites.png'),loadImage('img/hookRope.png'), loadLevel('1'), loadImage('img/backgrounds.png')])
+    .then(([image,hookImage, levelSpec, backgrounds]) => {
 
     const balls = loadBalls(levelSpec.balls);
     const hooks = new Set();
     const hookManager = loadHookManager(hookImage, hooks);
+    const drawBackground = loadBackground(backgrounds);
 
     const buster = loadBuster(image, levelSpec.player);
     buster.setHookManager(hookManager);
@@ -34,7 +33,7 @@ Promise.all([loadImage('img/sprites.png'),loadImage('img/hookRope.png'), loadLev
     function update(time) {
 
         deltaTime = time - lastTime;
-        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawBackground(context);
         
        
 
@@ -52,7 +51,7 @@ Promise.all([loadImage('img/sprites.png'),loadImage('img/hookRope.png'), loadLev
         });
         
         collisionManager.checkCollisions();
-        
+
         lastTime = time;
         requestAnimationFrame(update);
     }

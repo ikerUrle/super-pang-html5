@@ -19,7 +19,8 @@ class CollisionManager{
                     if(splitBalls){
                         splitBalls.forEach(splitBall => this.balls.add(splitBall));
                     }
-                }else if(hook.to_kill){
+                }
+                if(hook.to_kill){
                     this.hooks.delete(hook);
                 }
             });
