@@ -1,4 +1,6 @@
 import {Vec2D} from "./math.js";
+import Settings from "./Settings.js";
+import { Ball } from "./Ball.js";
 
 class CollisionManager{
 
@@ -11,11 +13,28 @@ class CollisionManager{
         this.balls.forEach(ball => {
             this.hooks.forEach(hook => {
                 if(ball_to_box(ball,hook,false)){
-                    console.log('Pang!');
+                    this.balls.delete(ball);
+                    this.hooks.delete(hook);
+                    var splitBalls = this.split_ball(ball);
+                    if(splitBalls){
+                        splitBalls.forEach(splitBall => this.balls.add(splitBall));
+                    }
+                }else if(hook.to_kill){
+                    this.hooks.delete(hook);
                 }
             });
         
         });
+    }
+
+    split_ball(ball){
+        if(ball.radius > Settings.MIN_BALL_RADIUS){
+            var balls = new Set();
+            var newRadius = Math.floor(ball.radius / 2);
+            balls.add(new Ball(newRadius,ball.position,new Vec2D(-ball.force.x, ball.force.y)));
+            balls.add(new Ball(newRadius,ball.position,new Vec2D(ball.force.x, ball.force.y)));
+            return balls;
+        }
     }
 }
 

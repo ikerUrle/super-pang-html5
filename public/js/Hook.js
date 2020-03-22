@@ -20,9 +20,9 @@ class Hook extends Object2D {
 
     draw(ctx){
        // pintar el hook de buffer en la posición x,y de este objeto
-        if(!this.to_kill){
+       
             ctx.drawImage(this.buffer,this.position.x,this.position.y);
-        }
+        
     }
 
     update(time_passed) {

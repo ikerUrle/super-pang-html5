@@ -3,6 +3,7 @@ import { Vec2D } from './math.js';
 import Player from './Player.js';
 import { Ball } from './Ball.js';
 import { Hook, HookType } from './Hook.js';
+import Settings from './Settings.js';
 
 
 export function loadLevel(currentLevel){
@@ -10,15 +11,20 @@ export function loadLevel(currentLevel){
 }
 
 export function loadBalls(balls){
-    let returnBalls = [];
+    let returnBalls = new Set();
     balls.forEach(element => {
-        returnBalls.push(new Ball(element.radius,new Vec2D(element.pos[0],element.pos[1]),new Vec2D(element.force[0],element.force[1])));
+        returnBalls.add(new Ball(element.radius,new Vec2D(element.pos[0],element.pos[1]),new Vec2D(element.force[0],element.force[1])));
     });
     return returnBalls;
 }
 
 export function loadHookManager(image, hooks){
-    return (x,y) => hooks.push(new Hook(10,new Vec2D(x,y),HookType.chain,image))
+    return (x,y) => {
+        if(hooks.size < Settings.MAX_HOOKS){
+            hooks.add(new Hook(10,new Vec2D(x,y),HookType.rope,image))
+        }
+    }
+
 }
 
 export function loadImage(url){
