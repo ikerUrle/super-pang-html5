@@ -23,6 +23,14 @@ export default class Player extends Object2D {
         this.distance = 0;
     }
 
+    setHookManager(hookManager){
+        this.hookManager = hookManager;
+    }
+
+    shoot(){
+        this.hookManager(this.position.x,this.position.y);
+    }
+
     // time respresenta el tiempo que ha pasado desde la última ejecución
     update(time) {
 

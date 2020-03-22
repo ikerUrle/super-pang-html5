@@ -46,7 +46,8 @@ class Vec2D {
         // devuelve true si a aprox. igual a b
         // iguales salvo una diferencia absoluta
         // máxima de epsilon
-        return a == b ? true : Math.abs(a-b) < epsilon;  //Esta funcion puede que no sirva
+        var diff = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+        return diff < epsilon;  //Esta funcion puede que no sirva
     }
 }
 

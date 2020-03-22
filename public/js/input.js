@@ -26,6 +26,12 @@ export default function setupKeyboard(buster) {
             buster.direction.x = 0 
         }
     });
+
+    keyboard.addMapping('Space', keyState => {
+        if(keyState == PRESSED){
+            buster.shoot();
+        }
+    });
     return keyboard;
 }
 

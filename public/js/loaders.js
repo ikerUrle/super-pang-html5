@@ -2,6 +2,7 @@ import SpriteSheet from './SpriteSheet.js'
 import { Vec2D } from './math.js';
 import Player from './Player.js';
 import { Ball } from './Ball.js';
+import { Hook, HookType } from './Hook.js';
 
 
 export function loadLevel(currentLevel){
@@ -14,6 +15,10 @@ export function loadBalls(balls){
         returnBalls.push(new Ball(element.radius,new Vec2D(element.pos[0],element.pos[1]),new Vec2D(element.force[0],element.force[1])));
     });
     return returnBalls;
+}
+
+export function loadHookManager(image, hooks){
+    return (x,y) => hooks.push(new Hook(10,new Vec2D(x,y),HookType.chain,image))
 }
 
 export function loadImage(url){
