@@ -1,65 +1,73 @@
 import SpriteSheet from "./SpriteSheet.js";
-import {loadBuster, loadImage, loadLevel, loadBalls, loadHookManager, loadBackground} from "./loaders.js";
+import {
+  loadBuster,
+  loadImage,
+  loadLevel,
+  loadBalls,
+  loadHookManager,
+  loadBackground,
+  createBallFactory
+} from "./loaders.js";
 import setupKeyboard from "./input.js";
 import Settings from "./Settings.js";
-import {CollisionManager} from "./collisions.js";
+import { CollisionManager } from "./collisions.js";
 
-const canvas = document.getElementById('screen');
-const context = canvas.getContext('2d');
+const canvas = document.getElementById("screen");
+const context = canvas.getContext("2d");
 
 //Override settings
 
 Settings.SCREEN_HEIGHT = canvas.height;
 Settings.SCREEN_WIDTH = canvas.width;
 
+Promise.all([
+  loadImage("img/sprites.png"),
+  loadImage("img/hookRope.png"),
+  loadLevel("1"),
+  loadImage("img/backgrounds.png"),
+  loadImage("img/balls.png")
+]).then(([image, hookImage, levelSpec, backgrounds, ballsImage]) => {
+  const ballFactory = createBallFactory(ballsImage);
+  const balls = loadBalls(levelSpec.balls, ballFactory);
 
-Promise.all([loadImage('img/sprites.png'),loadImage('img/hookRope.png'), loadLevel('1'), loadImage('img/backgrounds.png')])
-    .then(([image,hookImage, levelSpec, backgrounds]) => {
+  const hooks = new Set();
+  const hookManager = loadHookManager(hookImage, hooks);
+  const drawBackground = loadBackground(backgrounds);
 
-    const balls = loadBalls(levelSpec.balls);
-    const hooks = new Set();
-    const hookManager = loadHookManager(hookImage, hooks);
-    const drawBackground = loadBackground(backgrounds);
+  const buster = loadBuster(image, levelSpec.player);
+  buster.setHookManager(hookManager);
 
-    const buster = loadBuster(image, levelSpec.player);
-    buster.setHookManager(hookManager);
-  
-    const collisionManager = new CollisionManager(hooks,balls);
-    
-    let deltaTime = 0;
-    let lastTime = 0;
+  const collisionManager = new CollisionManager(hooks, balls, ballFactory);
 
- 
-    function update(time) {
+  let deltaTime = 0;
+  let lastTime = 0;
 
-        deltaTime = time - lastTime;
-        drawBackground(context);
-        
-       
+  function update(time) {
+    deltaTime = time - lastTime;
+    drawBackground(context);
 
-        hooks.forEach(hook =>{
-            hook.draw(context);
-            hook.update(deltaTime/1000);
-        });
-
-        buster.draw(context);
-        buster.update(deltaTime/1000);
-       
-        balls.forEach(ball =>{
-            ball.draw(context);
-            ball.update(deltaTime/1000);
-        });
-        
-        collisionManager.checkCollisions();
-
-        lastTime = time;
-        requestAnimationFrame(update);
-    }
-
-    const input = setupKeyboard(buster);
-    input.listenTo(window);
+    hooks.forEach(hook => {
+      hook.draw(context);
+      hook.update(deltaTime / 1000);
+    });
 
     buster.draw(context);
-    update(0);
+    buster.update(deltaTime / 1000);
 
+    balls.forEach(ball => {
+      ball.draw(context);
+      ball.update(deltaTime / 1000);
+    });
+
+    collisionManager.checkCollisions();
+
+    lastTime = time;
+    requestAnimationFrame(update);
+  }
+
+  const input = setupKeyboard(buster);
+  input.listenTo(window);
+
+  buster.draw(context);
+  update(0);
 });

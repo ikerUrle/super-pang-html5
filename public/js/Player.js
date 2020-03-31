@@ -67,18 +67,9 @@ export default class Player extends Object2D {
       );
     }
 
-    // si buster se sale por la izquierda de la pantalla
-    // position = 0,y
-
-    // sino, si buster se sale por la derecha
-    // position =  lo más a la derecha sin salirse , y
-
     if (this.y > Settings.SCREEN_HEIGHT) {
       this.position = new Vec2D(this.x, Settings.SCREEN_HEIGHT);
     }
-
-    // si buster se sale por la parte inferior de la pantalla
-    // position = x, lo más abajo sin salirse
   }
 
   draw(context) {
@@ -87,6 +78,15 @@ export default class Player extends Object2D {
       this.x,
       this.y
     );
-    // pintar this.sprite en el contexto (en posicion x,y)
+  }
+
+  killThemAll() {
+    for (var i = 0; i < Settings.SCREEN_WIDTH; i += 5) {
+      this.hookManager(i, this.position.y);
+    }
+  }
+
+  setPos(pos) {
+    this.position = new Vec2D(pos[0], pos[1]);
   }
 }
