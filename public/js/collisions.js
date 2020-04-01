@@ -32,8 +32,8 @@ class CollisionManager{
         if(ball.radius > Settings.MIN_BALL_RADIUS){
             var balls = new Set();
             var newRadius = Math.floor(ball.radius / 2);
-            balls.add(new Ball(newRadius,ball.position,new Vec2D(-ball.force.x, ball.force.y)));
-            balls.add(new Ball(newRadius,ball.position,new Vec2D(ball.force.x, ball.force.y)));
+            balls.add(new Ball(newRadius,new Vec2D(ball.x-2,ball.y),new Vec2D(-ball.force.x-0.5, 2.1)));
+            balls.add(new Ball(newRadius,ball.position,new Vec2D(ball.force.x+0.5, 2.1)));
             return balls;
         }
     }

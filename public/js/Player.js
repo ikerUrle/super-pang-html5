@@ -74,8 +74,8 @@ export default class Player extends Object2D {
         // sino, si buster se sale por la derecha
         // position =  lo más a la derecha sin salirse , y    
       
-        if(this.y > Settings.SCREEN_HEIGHT){
-            this.position = new Vec2D(this.x,Settings.SCREEN_HEIGHT);
+        if(this.y >Settings.SCREEN_HEIGHT-this.height-Settings.MARGIN){ 
+            this.position = new Vec2D(this.x,Settings.SCREEN_HEIGHT-this.height-Settings.MARGIN);
         }
 
         // si buster se sale por la parte inferior de la pantalla
