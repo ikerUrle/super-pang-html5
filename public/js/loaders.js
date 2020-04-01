@@ -4,6 +4,8 @@ import Player from "./Player.js";
 import { Ball } from "./Ball.js";
 import { Hook, HookType } from "./Hook.js";
 import Settings from "./Settings.js";
+import { Bonus, BonusType } from "./Bonus.js";
+import { AudioManager } from "./AudioManager.js";
 
 export function createBallFactory(ballsImage) {
   const spriteSheet = new SpriteSheet(ballsImage, 48 * 2, 40 * 2);
@@ -13,6 +15,15 @@ export function createBallFactory(ballsImage) {
 
   return function(radius, pos, force, color) {
     return new Ball(radius, pos, force, spriteSheet.get(color), color);
+  };
+}
+
+export function createBonusFactory(bonusImage) {
+  const bonusSprites = new SpriteSheet(bonusImage, 20, 20);
+  bonusSprites.define(BonusType.chain_hook, 2, 0);
+
+  return function(pos, bonusType) {
+    return new Bonus(pos, bonusType, bonusSprites.get(bonusType));
   };
 }
 
@@ -35,7 +46,7 @@ export function loadBalls(balls, ballFactory) {
   return returnBalls;
 }
 
-export function loadBackground(backgrounds) {
+export function loadBackground(backgrounds, level) {
   const buffer = document.createElement("canvas");
   buffer.width = 256;
   buffer.height = 192;
@@ -43,7 +54,7 @@ export function loadBackground(backgrounds) {
   const context = buffer.getContext("2d");
   context.drawImage(
     backgrounds,
-    0,
+    (level - 1) * buffer.width,
     0,
     buffer.width,
     buffer.height,
@@ -67,10 +78,24 @@ export function loadBackground(backgrounds) {
   };
 }
 
-export function loadHookManager(image, hooks) {
-  return (x, y) => {
+export function startLevel(level, balls, ballFactory, buster) {
+  return new Promise(resolve => {
+    loadLevel(level).then(levelInfo => {
+      var ballsAux = loadBalls(levelInfo.balls, ballFactory);
+      buster.setPos(levelInfo.player.pos);
+      ballsAux.forEach(ball => balls.add(ball));
+      resolve();
+    });
+  });
+}
+
+export function loadHookManager(hookImages, hooks) {
+  return (x, y, hookType) => {
     if (hooks.size < Settings.MAX_HOOKS) {
-      hooks.add(new Hook(10, new Vec2D(x, y), HookType.rope, image));
+      AudioManager.playShoot();
+      hooks.add(
+        new Hook(10, new Vec2D(x, y), hookType, hookImages.get(hookType))
+      );
     }
   };
 }
@@ -90,6 +115,7 @@ export function loadBuster(image, playerSpec) {
   spriteSheet.define("buster-2", 2, 0);
   spriteSheet.define("buster-3", 3, 0);
   spriteSheet.define("idle", 4, 0);
+  spriteSheet.define("hit", 7, 0);
 
   const pos = new Vec2D(playerSpec.pos[0], playerSpec.pos[1]);
   const size = new Vec2D(32, 32);

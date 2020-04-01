@@ -52,7 +52,6 @@ class Ball extends Object2D {
   }
 
   draw(ctx) {
-    ctx.fillText(this.force.y, 20, 20);
     ctx.drawImage(
       this.sprite,
       this.x - this.radius,

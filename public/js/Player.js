@@ -1,10 +1,15 @@
 import { Object2D, Vec2D } from "./math.js";
 import Settings from "./Settings.js";
+import { HookType, Hook } from "./Hook.js";
+import { BonusType } from "./Bonus.js";
 
 const frames = ["buster", "buster-1", "buster-2", "buster-3"];
 
 export default class Player extends Object2D {
   routeFrame() {
+    if (this.hit) {
+      return "hit";
+    }
     if (this.direction.x !== 0) {
       const frameIndex = Math.floor(this.distance / 10) % frames.length;
       const frameName = frames[frameIndex];
@@ -20,6 +25,9 @@ export default class Player extends Object2D {
     this.spriteSheet = spriteSheet;
     this.direction = new Vec2D(0, 0);
     this.distance = 0;
+    this.hookType = HookType.rope;
+    this.hit = false;
+    this.hits = 0;
   }
 
   setHookManager(hookManager) {
@@ -27,7 +35,7 @@ export default class Player extends Object2D {
   }
 
   shoot() {
-    this.hookManager(this.position.x, this.position.y);
+    this.hookManager(this.position.x + 16, this.position.y, this.hookType);
   }
 
   // time respresenta el tiempo que ha pasado desde la última ejecución
@@ -82,11 +90,17 @@ export default class Player extends Object2D {
 
   killThemAll() {
     for (var i = 0; i < Settings.SCREEN_WIDTH; i += 5) {
-      this.hookManager(i, this.position.y);
+      this.hookManager(i, this.position.y, this.hookType);
     }
   }
 
   setPos(pos) {
     this.position = new Vec2D(pos[0], pos[1]);
+  }
+
+  activateBonus(type) {
+    if (type === BonusType.chain_hook) {
+      this.hookType = HookType.chain;
+    }
   }
 }

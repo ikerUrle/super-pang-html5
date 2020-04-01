@@ -1,20 +1,33 @@
 import { Vec2D } from "./math.js";
 import Settings from "./Settings.js";
 import { Ball } from "./Ball.js";
+import { BonusType } from "./Bonus.js";
+import { AudioManager } from "./AudioManager.js";
 
 class CollisionManager {
-  constructor(hooks, balls, ballFactory) {
+  constructor(hooks, balls, ballFactory, bonuses, bonusFactory, player) {
     this.hooks = hooks;
     this.balls = balls;
+    this.bonuses = bonuses;
     this.ballFactory = ballFactory;
+    this.bonusFactory = bonusFactory;
+    this.player = player;
   }
 
   checkCollisions() {
     this.balls.forEach(ball => {
-      this.hooks.forEach(hook => {
+      if (ball_to_box(ball, this.player)) {
+        this.player.hit = true;
+        AudioManager.playHit();
+      }
+    });
+    this.hooks.forEach(hook => {
+      this.balls.forEach(ball => {
         if (ball_to_box(ball, hook, false)) {
           this.balls.delete(ball);
           this.hooks.delete(hook);
+          AudioManager.playBallsBreak();
+
           var splitBalls = this.split_ball(ball);
           if (splitBalls) {
             splitBalls.forEach(splitBall => this.balls.add(splitBall));
@@ -25,17 +38,25 @@ class CollisionManager {
         }
       });
     });
+
+    this.bonuses.forEach(bonus => {
+      this.box_to_box(bonus);
+      if (bonus.to_kill) {
+        this.bonuses.delete(bonus);
+      }
+    });
   }
 
   split_ball(ball) {
+    this.spawn_bonus(ball.position);
     if (ball.radius > Settings.MIN_BALL_RADIUS) {
       var balls = new Set();
       var newRadius = Math.floor(ball.radius / 2);
       balls.add(
         this.ballFactory(
           newRadius,
-          ball.position,
-          new Vec2D(-ball.force.x, ball.force.y),
+          new Vec2D(ball.x - 2, ball.y),
+          new Vec2D(-ball.force.x - 0.5, 2.1),
           ball.color
         )
       );
@@ -43,11 +64,32 @@ class CollisionManager {
         this.ballFactory(
           newRadius,
           ball.position,
-          new Vec2D(ball.force.x, ball.force.y),
+          new Vec2D(ball.force.x + 0.5, 2.1),
           ball.color
         )
       );
       return balls;
+    }
+  }
+
+  spawn_bonus(pos) {
+    if (Math.random() <= Settings.BONUS_SPAWN_CHANCE) {
+      this.bonuses.add(this.bonusFactory(pos, BonusType.chain_hook));
+    }
+  }
+
+  box_to_box(bonus) {
+    var collision = false;
+    if (bonus.y > Settings.SCREEN_HEIGHT - Settings.MARGIN - 32) {
+      if (bonus.x <= this.player.x && this.player.x < bonus.x + 20) {
+        collision = true;
+      }
+    }
+
+    if (collision) {
+      bonus.to_kill = true;
+      this.player.activateBonus(bonus.bonus_type);
+      AudioManager.playActivateBonus();
     }
   }
 }
