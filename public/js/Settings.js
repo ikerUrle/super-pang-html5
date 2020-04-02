@@ -11,6 +11,6 @@ export default class Settings {
   static BONUS_SIZE = 30;
   static BONUS_SPAWN_CHANCE = 0.15;
   static BONUS_SPEED = 50;
-  static MAX_LEVELS = 2;
+  static MAX_LEVELS = 5;
   static MAX_HITS = 3;
 }

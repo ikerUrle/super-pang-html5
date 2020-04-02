@@ -8,7 +8,8 @@ export let BonusType = {
   break_balls_once: "breakonce",
   break_balls_max: "breakmax",
   invulnerability: "invulnerable",
-  shoot: "shoot"
+  shoot: "shoot",
+  extra_hit: "extrahit"
 };
 
 export class Bonus extends Object2D {
@@ -33,24 +34,16 @@ export class Bonus extends Object2D {
       }
     } else {
       let increment =
-        Settings.BONUS_SPEED * time_passed < 1
-          ? 1
-          : Settings.BONUS_SPEED * time_passed;
+        Settings.BONUS_SPEED * time_passed < 1 ? 1 : Settings.BONUS_SPEED * time_passed;
       this.position = this.position.add(new Vec2D(0, increment));
 
       if (this.x < Settings.MARGIN) {
         this.position = new Vec2D(Settings.MARGIN, this.y);
       } else if (this.x > Settings.SCREEN_WIDTH - Settings.MARGIN - 20) {
-        this.position = new Vec2D(
-          Settings.SCREEN_WIDTH - Settings.MARGIN - 20,
-          this.y
-        );
+        this.position = new Vec2D(Settings.SCREEN_WIDTH - Settings.MARGIN - 20, this.y);
       }
       if (this.y > Settings.SCREEN_HEIGHT - Settings.MARGIN - 20) {
-        this.position = new Vec2D(
-          this.x,
-          Settings.SCREEN_HEIGHT - Settings.MARGIN - 20
-        );
+        this.position = new Vec2D(this.x, Settings.SCREEN_HEIGHT - Settings.MARGIN - 20);
         this.falling = false;
       }
     }

@@ -1,7 +1,7 @@
 import { Vec2D } from "./math.js";
 import Settings from "./Settings.js";
 import { Ball } from "./Ball.js";
-import { BonusType } from "./Bonus.js";
+import { BonusType, Bonus } from "./Bonus.js";
 import { AudioManager } from "./AudioManager.js";
 
 class CollisionManager {
@@ -17,8 +17,18 @@ class CollisionManager {
   checkCollisions() {
     this.balls.forEach(ball => {
       if (ball_to_box(ball, this.player)) {
-        this.player.hit = true;
-        AudioManager.playHit();
+        if (!this.player.inmune) {
+          if (this.player.bonuses.has(BonusType.invulnerability)) {
+            this.player.inmune = true;
+            this.player.bonuses.delete(BonusType.invulnerability);
+            window.setTimeout(() => {
+              this.player.inmune = false;
+            }, 3000);
+          } else {
+            this.player.hit = true;
+            AudioManager.playHit();
+          }
+        }
       }
     });
     this.hooks.forEach(hook => {
@@ -61,12 +71,7 @@ class CollisionManager {
         )
       );
       balls.add(
-        this.ballFactory(
-          newRadius,
-          ball.position,
-          new Vec2D(ball.force.x + 0.5, 2.1),
-          ball.color
-        )
+        this.ballFactory(newRadius, ball.position, new Vec2D(ball.force.x + 0.5, 2.1), ball.color)
       );
       return balls;
     }
@@ -74,7 +79,14 @@ class CollisionManager {
 
   spawn_bonus(pos) {
     if (Math.random() <= Settings.BONUS_SPAWN_CHANCE) {
-      this.bonuses.add(this.bonusFactory(pos, BonusType.chain_hook));
+      var possibleBonuses = [
+        BonusType.extra_hit,
+        BonusType.extra_hook,
+        BonusType.chain_hook,
+        BonusType.invulnerability
+      ];
+      var bonusChooser = Math.floor(Math.random() * possibleBonuses.length);
+      this.bonuses.add(this.bonusFactory(pos, possibleBonuses[bonusChooser]));
     }
   }
 
@@ -82,6 +94,11 @@ class CollisionManager {
     var collision = false;
     if (bonus.y > Settings.SCREEN_HEIGHT - Settings.MARGIN - 32) {
       if (bonus.x <= this.player.x && this.player.x < bonus.x + 20) {
+        collision = true;
+      } else if (
+        this.player.x >= Settings.SCREEN_WIDTH - Settings.MARGIN - 32 &&
+        bonus.x >= Settings.SCREEN_WIDTH - Settings.MARGIN - 20
+      ) {
         collision = true;
       }
     }
@@ -136,20 +153,14 @@ function ball_to_box(ball, box, solid = false) {
       //  # 8
       box_x_edge = box.x + box.width;
       box_y_edge = box.y + box.height;
-      if (
-        (ball.x - box_x_edge) ** 2 + (ball.y - box_y_edge) ** 2 <
-        radius ** 2
-      ) {
+      if ((ball.x - box_x_edge) ** 2 + (ball.y - box_y_edge) ** 2 < radius ** 2) {
         region = 8;
       }
     } else if (ball.y < box.y) {
       //  # 3
       box_x_edge = box.x + box.width;
       box_y_edge = box.y;
-      if (
-        (ball.x - box_x_edge) ** 2 + (ball.y - box_y_edge) ** 2 <
-        radius ** 2
-      ) {
+      if ((ball.x - box_x_edge) ** 2 + (ball.y - box_y_edge) ** 2 < radius ** 2) {
         region = 3;
       }
     } else {
@@ -166,14 +177,12 @@ function ball_to_box(ball, box, solid = false) {
       // # 6
       box_x_edge = box.x;
       box_y_edge = box.y + box.height;
-      if ((ball.x - box_x_edge) ** 2 + (ball.y - box_y_edge) ** 2 < radius ** 2)
-        region = 6;
+      if ((ball.x - box_x_edge) ** 2 + (ball.y - box_y_edge) ** 2 < radius ** 2) region = 6;
     } else if (ball.y < box.y) {
       //  # 1
       box_x_edge = box.x;
       box_y_edge = box.y;
-      if ((ball.x - box_x_edge) ** 2 + (ball.y - box_y_edge) ** 2 < radius ** 2)
-        region = 1;
+      if ((ball.x - box_x_edge) ** 2 + (ball.y - box_y_edge) ** 2 < radius ** 2) region = 1;
     } else {
       //  # 4
       if (box.x <= ball.x + radius) {

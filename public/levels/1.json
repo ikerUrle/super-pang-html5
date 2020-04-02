@@ -13,7 +13,7 @@
       "radius": 40,
       "pos": [50, 50],
       "force": [1, 0.5],
-      "color": "red"
+      "color": "blue"
     }
   ]
 }
