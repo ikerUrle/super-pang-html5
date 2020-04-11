@@ -6,7 +6,7 @@
     {
       "radius": 20,
       "pos": [150, 100],
-      "force": [2.5, 0.5],
+      "force": [2, 0.5],
       "color": "green"
     },
     {

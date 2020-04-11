@@ -18,21 +18,26 @@ class Ball extends Object2D {
       damping = 0.9,
       traction = 0.8;
 
-    if (this.x + this.radius >= Settings.SCREEN_WIDTH) {
+    if (this.x + this.radius >= Settings.SCREEN_WIDTH - Settings.MARGIN) {
       this.force = new Vec2D(-this.force.x * damping, this.force.y);
-      this.position = new Vec2D(Settings.SCREEN_WIDTH - this.radius, this.position.y);
-    } else if (this.x - this.radius <= 0) {
+      this.position = new Vec2D(
+        Settings.SCREEN_WIDTH - Settings.MARGIN - this.radius,
+        this.position.y
+      );
+    } else if (this.x - this.radius <= Settings.MARGIN) {
       this.force = new Vec2D(-this.force.x * damping, this.force.y);
-      this.position = new Vec2D(this.radius, this.position.y);
+      this.position = new Vec2D(this.radius + Settings.MARGIN, this.position.y);
     }
 
-    if (this.y + this.radius >= Settings.SCREEN_HEIGHT) {
+    if (this.y + this.radius >= Settings.SCREEN_HEIGHT - Settings.MARGIN) {
       this.force = new Vec2D(this.force.x * traction, -this.force.y * damping);
-      this.position = new Vec2D(this.position.x, Settings.SCREEN_HEIGHT - this.radius);
-      // traction here
-    } else if (this.y - this.radius <= 0) {
+      this.position = new Vec2D(
+        this.position.x,
+        Settings.SCREEN_HEIGHT - this.radius - Settings.MARGIN
+      );
+    } else if (this.y - this.radius <= Settings.MARGIN) {
       this.force = new Vec2D(this.force.x, -this.force.y * damping);
-      this.position = new Vec2D(this.position.x, this.radius);
+      this.position = new Vec2D(this.position.x, this.radius + Settings.MARGIN);
     }
 
     this.force = this.force.add(new Vec2D(0, gravity));

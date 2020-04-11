@@ -28,11 +28,6 @@ export default function setupKeyboard(buster) {
     }
   });
 
-  keyboard.addMapping("KeyK", keyState => {
-    if (keyState == PRESSED) {
-      buster.killThemAll();
-    }
-  });
   return keyboard;
 }
 

@@ -55,12 +55,6 @@ export default class Player extends Object2D {
       this.distance = 0;
     }
 
-    /*
-        Asume por el momento que Settings.SCREEN_HEIGHT y Settings.SCREEN_WIDTH indican el tamaño de
-        la pantalla del juego. Settings tiene otras constantes definidas (échales un vistazo)
-        El objeto player tiene una altura (height) y una anchura (width) 
-         */
-
     if (this.y < Settings.SCREEN_HEIGHT - this.height - Settings.MARGIN) {
       this.force = this.force.add(Settings.GRAVITY * time);
       this.position = this.position.add(new Vec2D(0, this.force.y * time));
@@ -70,11 +64,6 @@ export default class Player extends Object2D {
       new Vec2D(this.direction.x * time * Settings.PLAYER_SPEED, 0)
     );
 
-    // si buster está cayendo (está por debajo de la altura de la pantalla)
-    // fuerza = añadir fuerza vertical de gravedad * tiempo
-    // position = añadir fuerza * tiempo al eje y
-
-    // position = añadir dirección * tiempo * velocidad del jugador al eje x
     if (this.x < Settings.MARGIN) {
       this.position = new Vec2D(Settings.MARGIN, this.y);
     } else if (this.x > Settings.SCREEN_WIDTH - this.width - Settings.MARGIN) {
@@ -98,12 +87,6 @@ export default class Player extends Object2D {
       this.drawAux = !this.drawAux;
     } else {
       context.drawImage(this.spriteSheet.get(this.routeFrame(), this.direction.x), this.x, this.y);
-    }
-  }
-
-  killThemAll() {
-    for (var i = 0; i < Settings.SCREEN_WIDTH; i += 5) {
-      this.hookManager(i, this.position.y, HookType.rope);
     }
   }
 

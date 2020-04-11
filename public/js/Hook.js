@@ -34,10 +34,7 @@ class Hook extends Object2D {
 
     // si está en expansión y subiendo, incrementar tamaño y posición em increment unidades
     if (this.expand) {
-      let increment =
-        Settings.HOOK_SPEED * time_passed < 1
-          ? 1
-          : Settings.HOOK_SPEED * time_passed;
+      let increment = Settings.HOOK_SPEED * time_passed < 1 ? 1 : Settings.HOOK_SPEED * time_passed;
       this.size = this.size.add(new Vec2D(0, increment));
       this.position = this.position.add(new Vec2D(0, -increment));
     }

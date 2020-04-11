@@ -10,12 +10,6 @@
       "color": "green"
     },
     {
-      "radius": 20,
-      "pos": [300, 100],
-      "force": [2, 0.5],
-      "color": "green"
-    },
-    {
       "radius": 40,
       "pos": [50, 50],
       "force": [1, 0.5],

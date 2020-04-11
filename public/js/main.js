@@ -80,7 +80,6 @@ Promise.all([
     function update(time) {
       deltaTime = time - lastTime;
       drawBackground(context);
-
       hooks.forEach(hook => {
         hook.draw(context);
         hook.update(deltaTime / 1000);
