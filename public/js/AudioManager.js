@@ -46,7 +46,9 @@ class AudioManager {
 
   static playGameover() {
     this.soundtrackAudio.pause();
-    this.gameoverAudio.play();
+    if(!this.gameoverAudio.playing()){
+        this.gameoverAudio.play();
+    }
   }
   static playVictory() {
     this.soundtrackAudio.pause();
