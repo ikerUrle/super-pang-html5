@@ -4,6 +4,7 @@ export default class Settings {
   static GRAVITY = 9.8 * 10;
   static PLAYER_SPEED = 200;
   static HOOK_SPEED = 200;
+  static HOOK_DURATION = 3;
   static MAX_HOOKS = 5;
   static MIN_BALL_RADIUS = 5;
   static MARGIN = 12;

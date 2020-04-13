@@ -4,7 +4,7 @@ import Settings from "./Settings.js";
 
 let HookType = {
   rope: 0,
-  chain: 1
+  chain: 1,
 };
 
 class Hook extends Object2D {
@@ -47,6 +47,7 @@ class Hook extends Object2D {
       } else if (this.hook_type === HookType.chain) {
         this.size.x = 0;
         this.position.y = 0;
+        this.expand = false;
       }
     }
   }
