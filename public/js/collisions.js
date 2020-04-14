@@ -15,7 +15,7 @@ class CollisionManager {
   }
 
   checkCollisions() {
-    this.balls.forEach(ball => {
+    this.balls.forEach((ball) => {
       if (ball_to_box(ball, this.player)) {
         if (!this.player.inmune) {
           if (this.player.bonuses.has(BonusType.invulnerability)) {
@@ -31,8 +31,8 @@ class CollisionManager {
         }
       }
     });
-    this.hooks.forEach(hook => {
-      this.balls.forEach(ball => {
+    this.hooks.forEach((hook) => {
+      this.balls.forEach((ball) => {
         if (ball_to_box(ball, hook, false)) {
           this.balls.delete(ball);
           this.hooks.delete(hook);
@@ -40,7 +40,7 @@ class CollisionManager {
 
           var splitBalls = this.split_ball(ball);
           if (splitBalls) {
-            splitBalls.forEach(splitBall => this.balls.add(splitBall));
+            splitBalls.forEach((splitBall) => this.balls.add(splitBall));
           }
         }
         if (hook.to_kill) {
@@ -49,7 +49,7 @@ class CollisionManager {
       });
     });
 
-    this.bonuses.forEach(bonus => {
+    this.bonuses.forEach((bonus) => {
       this.box_to_box(bonus);
       if (bonus.to_kill) {
         this.bonuses.delete(bonus);
@@ -58,7 +58,7 @@ class CollisionManager {
   }
 
   split_ball(ball) {
-    this.spawn_bonus(ball.position);
+    this.spawn_bonus(new Vec2D(ball.position.x, ball.position.y));
     if (ball.radius > Settings.MIN_BALL_RADIUS) {
       var balls = new Set();
       var newRadius = Math.floor(ball.radius / 2);
@@ -66,12 +66,12 @@ class CollisionManager {
         this.ballFactory(
           newRadius,
           new Vec2D(ball.x - 2, ball.y),
-          new Vec2D(-ball.force.x - 0.5, 2.1),
+          new Vec2D(-ball.force.x - 0.2, -2.1),
           ball.color
         )
       );
       balls.add(
-        this.ballFactory(newRadius, ball.position, new Vec2D(ball.force.x + 0.5, 2.1), ball.color)
+        this.ballFactory(newRadius, ball.position, new Vec2D(ball.force.x + 0.2, -2.1), ball.color)
       );
       return balls;
     }
@@ -83,7 +83,7 @@ class CollisionManager {
         BonusType.extra_hit,
         BonusType.extra_hook,
         BonusType.chain_hook,
-        BonusType.invulnerability
+        BonusType.invulnerability,
       ];
       var bonusChooser = Math.floor(Math.random() * possibleBonuses.length);
       this.bonuses.add(this.bonusFactory(pos, possibleBonuses[bonusChooser]));
