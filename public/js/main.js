@@ -34,7 +34,8 @@ Promise.all([
   loadImage("img/hookChain.png"),
   loadImage("img/endScreen.png"),
   loadImage("img/hit.png"),
-  loadImage("img/shield.png")
+  loadImage("img/shield.png"),
+  loadImage("img/border.png")
 ]).then(
   ([
     playerImage,
@@ -45,7 +46,8 @@ Promise.all([
     hookChainImage,
     endScreen,
     hitImage,
-    shieldImage
+    shieldImage,
+    borderImage
   ]) => {
     let level = 1;
     let drawBackground;
@@ -92,6 +94,8 @@ Promise.all([
         ball.draw(context);
         ball.update(deltaTime / 1000);
       });
+
+      context.drawImage(borderImage, 0, 0, Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
 
       if (buster.bonuses.has(BonusType.extra_hit) && buster.hits > 0) {
         buster.hits--;
