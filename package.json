@@ -1,0 +1,23 @@
+{
+  "name": "super-pang-html5",
+  "version": "1.0.0",
+  "description": "Super pang implementation on HTML5",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ikerUrle/super-pang-html5.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ikerUrle/super-pang-html5/issues"
+  },
+  "homepage": "https://github.com/ikerUrle/super-pang-html5#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
