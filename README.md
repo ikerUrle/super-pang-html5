@@ -19,7 +19,7 @@ npm start #run the game
 ##### Using Python
     python -m http.server 5000 --dir public
 
-The game will open on `localhost:8000`.
+The game will open on `localhost:5000`.
 
 
 
