@@ -1,19 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
 body {
   margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  background-color: #83a6cc;
-  background-image: linear-gradient(to right, #83a6cc, #3668a7);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: purple;
+  background-image: url(img/page_background.png);
+  font-family: "Press Start 2P", cursive;
 }
 
 .nav {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  background-color: #3668a7;
   color: #fff;
   margin-bottom: 50px;
 }
@@ -23,11 +24,11 @@ a {
 }
 
 a:hover {
-  color: #83a6cc;
+  color: magenta;
 }
 
 .nav-logo {
-  margin-left: 10px;
+  margin-left: 40px;
 }
 
 .nav-content {
@@ -48,6 +49,7 @@ a:hover {
 canvas {
   height: 300px;
   width: 400px;
+  border: 5px solid purple;
 }
 
 .content ul {
@@ -58,9 +60,11 @@ canvas {
   flex: 1;
   font-size: 18px;
   padding: 10px;
-  background-color: #bed8f1;
-  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 10px double purple;
   margin: 50px;
+  color: #fff;
+  line-height: 2rem;
 }
 
 .card .icon {
@@ -73,4 +77,9 @@ canvas {
   height: 24px;
   position: relative;
   top: 5px;
+}
+
+mark {
+  background: #fff;
+  padding: 5px;
 }
